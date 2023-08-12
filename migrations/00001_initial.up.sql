@@ -1,0 +1,11 @@
+    CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+    CREATE TABLE IF NOT EXISTS items (
+        created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        id          UUID PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
+        title       VARCHAR NOT NULL,
+        active_at   VARCHAR NOT NULL,
+        status      BOOLEAN NOT NULL DEFAULT FALSE
+
+    );
