@@ -183,7 +183,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tasks/{id}/done": {
+        "/tasks/{id}/status": {
             "put": {
                 "consumes": [
                     "application/json"

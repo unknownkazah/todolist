@@ -1,0 +1,35 @@
+### GET
+GET http://localhost/api/v1/tasks
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### Add
+POST http://localhost/api/v1/tasks
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+    "activeAt": "2023-05-21",
+    "title": "adi"
+}
+
+
+### Update
+PUT http://localhost/api/v1/tasks/1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "activeAt": "2023-06-25",
+  "title": "up"
+}
+
+### Delete
+DELETE http://localhost/api/v1/tasks/1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### Status Done
+PUT http://localhost/api/v1/tasks/93104287-f853-4ba7-afaf-98603899def4/done
+Content-Type: application/json
+Authorization: Bearer {{access_token}}

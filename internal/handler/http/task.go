@@ -26,7 +26,7 @@ func (h *Handler) Routes() chi.Router {
 	r.Post("/", h.create)
 
 	r.Route("/{id}", func(r chi.Router) {
-		r.Put("/done", h.status)
+		r.Put("/status", h.status)
 		r.Put("/", h.update)
 		r.Delete("/", h.delete)
 	})
@@ -45,7 +45,7 @@ func (h *Handler) Routes() chi.Router {
 //	@Success	200	{object}	response.Object
 //	@Failure	404	{object}	response.Object
 //	@Failure	500	{object}	response.Object
-//	@Router		/tasks/{id}/done [put]
+//	@Router		/tasks/{id}/status [put]
 func (h *Handler) status(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 

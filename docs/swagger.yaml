@@ -126,7 +126,7 @@ paths:
       summary: Update the task in the database
       tags:
       - tasks
-  /tasks/{id}/done:
+  /tasks/{id}/status:
     put:
       consumes:
       - application/json
