@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 	"todo/internal/domain/list"
 
 	"github.com/jmoiron/sqlx"
@@ -21,10 +22,14 @@ func NewRepository(db *sqlx.DB) *Repository {
 
 func (s *Repository) List(ctx context.Context) (dest []list.Entity, err error) {
 	query := `
-		SELECT  id,title, active_at
-		FROM items`
+		SELECT title, active_at
+		FROM items
+		WHERE DATE(active_at) = DATE($1)
+		ORDER BY id`
 
-	err = s.db.SelectContext(ctx, &dest, query)
+	currentDate := time.Now().Format("2006-01-02")
+
+	err = s.db.SelectContext(ctx, &dest, query, currentDate)
 
 	return
 }

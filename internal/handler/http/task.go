@@ -27,7 +27,6 @@ func (h *Handler) Routes() chi.Router {
 
 	r.Route("/{id}", func(r chi.Router) {
 		r.Put("/done", h.status)
-		r.Get("/", h.get)
 		r.Put("/", h.update)
 		r.Delete("/", h.delete)
 	})
@@ -38,15 +37,15 @@ func (h *Handler) Routes() chi.Router {
 // List of tasks from the database
 //
 
-// @Summary	Status the tasks from the database
-// @Tags		tasks
-// @Accept		json
-// @Produce	json
-// @Param		id	path		string	true	"path param"
-// @Success	200	{object}	response.Object
-// @Failure	404	{object}	response.Object
-// @Failure	500	{object}	response.Object
-// @Router		/tasks/{id}/done [put]
+//	@Summary	Status the tasks from the database
+//	@Tags		tasks
+//	@Accept		json
+//	@Produce	json
+//	@Param		id	path		string	true	"path param"
+//	@Success	200	{object}	response.Object
+//	@Failure	404	{object}	response.Object
+//	@Failure	500	{object}	response.Object
+//	@Router		/tasks/{id}/done [put]
 func (h *Handler) status(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
@@ -61,13 +60,13 @@ func (h *Handler) status(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// @Summary	List of tasks from the database
-// @Tags		tasks
-// @Accept		json
-// @Produce	json
-// @Success	200		{array}		response.Object
-// @Failure	500		{object}	response.Object
-// @Router		/tasks 	[get]
+//	@Summary	List of tasks from the database
+//	@Tags		tasks
+//	@Accept		json
+//	@Produce	json
+//	@Success	200		{array}		response.Object
+//	@Failure	500		{object}	response.Object
+//	@Router		/tasks 	[get]
 func (h *Handler) list(w http.ResponseWriter, r *http.Request) {
 	res, err := h.todoService.List(r.Context())
 	if err != nil {
@@ -99,34 +98,6 @@ func (h *Handler) create(w http.ResponseWriter, r *http.Request) {
 	res, err := h.todoService.Create(r.Context(), req)
 	if err != nil {
 		response.InternalServerError(w, r, err)
-		return
-	}
-
-	response.OK(w, r, res)
-}
-
-// Read the task from the database
-//
-//	@Summary	Read the task from the database
-//	@Tags		tasks
-//	@Accept		json
-//	@Produce	json
-//	@Param		id	path		string	true	"path param"
-//	@Success	200	{object}	response.Object
-//	@Failure	404	{object}	response.Object
-//	@Failure	500	{object}	response.Object
-//	@Router		/tasks/{id} [get]
-func (h *Handler) get(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
-
-	res, err := h.todoService.Get(r.Context(), id)
-	if err != nil {
-		switch {
-		case errors.Is(err, sql.ErrNoRows):
-			response.NotFound(w, r, err)
-		default:
-			response.InternalServerError(w, r, err)
-		}
 		return
 	}
 

@@ -93,33 +93,6 @@ paths:
       summary: Delete the task from the database
       tags:
       - tasks
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: path param
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Object'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/response.Object'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/response.Object'
-      summary: Read the task from the database
-      tags:
-      - tasks
     put:
       consumes:
       - application/json

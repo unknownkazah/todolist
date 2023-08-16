@@ -9,6 +9,6 @@ type Entity struct {
 	UpdatedAt time.Time `db:"updated_at"`
 	ID        string    `db:"id"`
 	Title     *string   `db:"title"`
-	ActiveAt  *string   `db:"activeAt"`
+	ActiveAt  *string   `db:"active_at"`
 	Status    *bool     `db:"status"`
 }
