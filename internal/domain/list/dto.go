@@ -9,7 +9,7 @@ import (
 type Request struct {
 	Title    string `json:"title"`
 	ActiveAt string `json:"activeAt"`
-	Status   bool   `json:"status,omitempty"`
+	Status   bool   `json:"-"`
 }
 
 func (s *Request) Bind(r *http.Request) error {
@@ -38,7 +38,6 @@ func (s *Request) Bind(r *http.Request) error {
 type Response struct {
 	Title    string `json:"title"`
 	ActiveAt string `json:"activeAt"`
-	Status   bool   `json:"status,omitempty"`
 }
 
 func ParseFromEntity(data Entity) (res Response) {

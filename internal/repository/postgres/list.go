@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"fmt"
+	"github.com/lib/pq"
 	"strings"
 	"time"
 	"todo/internal/domain/list"
@@ -30,8 +31,27 @@ func (s *Repository) List(ctx context.Context) (dest []list.Entity, err error) {
 	currentDate := time.Now().Format("2006-01-02")
 
 	err = s.db.SelectContext(ctx, &dest, query, currentDate)
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	// Modify task titles for weekends
+	for i, task := range dest {
+		if task.ActiveAt != nil {
+			activeAt, err := time.Parse("2006-01-02", *task.ActiveAt)
+			if err != nil {
+				return nil, err
+			}
+
+			weekday := activeAt.Weekday()
+			if weekday == time.Saturday || weekday == time.Sunday {
+				title := fmt.Sprintf("ВЫХОДНОЙ - %s", *task.Title)
+				dest[i].Title = &title
+			}
+		}
+	}
+
+	return dest, nil
 }
 
 func (s *Repository) Status(ctx context.Context, id string, data list.Entity) (err error) {
@@ -49,15 +69,23 @@ func (s *Repository) Status(ctx context.Context, id string, data list.Entity) (e
 
 func (s *Repository) Create(ctx context.Context, data list.Entity) (id string, err error) {
 	query := `
-		INSERT INTO items (title, active_at)
-		VALUES ($1, $2)
-		RETURNING id`
+        INSERT INTO items (title, active_at)
+        VALUES ($1, $2)
+        ON CONFLICT (title, active_at) DO NOTHING
+        RETURNING id`
 
-	args := []any{data.Title, data.ActiveAt}
+	args := []interface{}{data.Title, data.ActiveAt}
 
 	err = s.db.QueryRowContext(ctx, query, args...).Scan(&id)
+	if err != nil {
+		if pgErr, ok := err.(*pq.Error); ok && pgErr.Code == "23505" {
+			// Ошибка уникальности (23505) - задача с такими полями уже существует
+			return id, fmt.Errorf("task with same title and activeAt already exists")
+		}
+		return id, err
+	}
 
-	return
+	return id, nil
 }
 
 func (s *Repository) Get(ctx context.Context, id string) (dest list.Entity, err error) {

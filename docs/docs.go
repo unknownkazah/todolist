@@ -234,9 +234,6 @@ const docTemplate = `{
                 "activeAt": {
                     "type": "string"
                 },
-                "status": {
-                    "type": "boolean"
-                },
                 "title": {
                     "type": "string"
                 }

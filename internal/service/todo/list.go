@@ -22,12 +22,14 @@ func (s *Service) List(ctx context.Context) (res []list.Response, err error) {
 }
 
 func (s *Service) GetStatus(ctx context.Context, id string, req list.Request) (err error) {
+	logger := log.LoggerFromContext(ctx).Named("GetStatus")
 	data := list.Entity{
 		Status: &req.Status,
 	}
 
 	err = s.listRepository.Status(ctx, id, data)
 	if err != nil {
+		logger.Error("failed to create", zap.Error(err))
 		return
 	}
 
@@ -58,6 +60,7 @@ func (s *Service) Get(ctx context.Context, id string) (res list.Response, err er
 	data, err := s.listRepository.Get(ctx, id)
 	if err != nil {
 		logger.Error("failed to get by id", zap.Error(err))
+
 		return
 	}
 	res = list.ParseFromEntity(data)
